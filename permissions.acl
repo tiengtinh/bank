@@ -29,13 +29,14 @@ rule CustomerCanCreateAccountTransferFromOwnAccount {
     action: ALLOW
 }
 
-rule CustomerCanReadToAccountFromAccountTransfer {
-    description: ""
+rule CustomerCanReadAndUpdateAccountsFromAccountTransfer {
+    description: "Customer can read and update accounts from AccountTransfer transaction"
     participant(p): "org.bank.Customer"
     operation: READ, UPDATE
     resource(r): "org.bank.Account"
     transaction(tx): "org.bank.AccountTransfer"
-    condition: (tx.from.owner.getIdentifier() === p.getIdentifier())
+    condition: (true)
+    // condition: (tx.from.owner.getIdentifier() === p.getIdentifier())
     action: ALLOW
 }
 
@@ -47,6 +48,8 @@ rule CustomerCanReadAccountTransferFromOwnAccount {
     condition: (r.from.owner.getIdentifier() === p.getIdentifier())
     action: ALLOW
 }
+
+
 
 // rule EverybodyCanReadEverything {
 //     description: "Allow all participants read access to all resources"

@@ -26,24 +26,24 @@ Feature: Sample
         And I have issued the participant org.bank.Customer#alice@email.com with the identity alice1
         And I have issued the participant org.bank.Customer#bob@email.com with the identity bob1
 
-    Scenario: Alice can only read her own account
-        When I use the identity alice1
-        Then I should have the following assets of type org.bank.Account
-            | accountId | owner           | balance |
-            | 1         | alice@email.com | 10      |
-        And I should not have the following assets of type org.bank.Account
-            | accountId | owner         | balance |
-            | 2         | bob@email.com | 20      |
+    # Scenario: Alice can only read her own account
+    #     When I use the identity alice1
+    #     Then I should have the following assets of type org.bank.Account
+    #         | accountId | owner           | balance |
+    #         | 1         | alice@email.com | 10      |
+    #     And I should not have the following assets of type org.bank.Account
+    #         | accountId | owner         | balance |
+    #         | 2         | bob@email.com | 20      |
 
-    Scenario: Bob can only read his own account
-        When I use the identity bob1
-        Then I should have the following assets of type org.bank.Account
-            | accountId | owner           | balance |
-            | 2         | bob@email.com | 20      |
-        And I should not have the following assets of type org.bank.Account
-            | accountId | owner         | balance |
-            | 1         | alice@email.com | 10      |
-    # -- AccountTransfer
+    # Scenario: Bob can only read his own account
+    #     When I use the identity bob1
+    #     Then I should have the following assets of type org.bank.Account
+    #         | accountId | owner           | balance |
+    #         | 2         | bob@email.com | 20      |
+    #     And I should not have the following assets of type org.bank.Account
+    #         | accountId | owner         | balance |
+    #         | 1         | alice@email.com | 10      |
+    # # -- AccountTransfer
 
     Scenario: Alice can submit AccountTransfer from her Account
         When I use the identity alice1
@@ -57,6 +57,22 @@ Feature: Sample
         Then I should have the following assets of type org.bank.Account
             | accountId | owner         | balance |
             | 2         | bob@email.com | 25      |
+
+    Scenario: Alice should not be able to create AccountTransfer from Bob's account
+        When I use the identity alice1
+        And I submit the following transaction of type org.bank.AccountTransfer
+            | from | to | amount |
+            | 2    | 1  | 5      |
+        Then I should get an error matching /AccessException: Participant 'org.bank.Customer#alice@email.com' does not have 'CREATE' access to resource/
+    
+    Scenario: Issueing AccountTransfer transaction should emit a "TransferCompleted" event
+        When I use the identity alice1
+        And I submit the following transaction of type org.bank.AccountTransfer
+            | from | to | amount |
+            | 1    | 2  | 5      |
+        Then I should have received the following event of type org.bank.TransferCompleted
+            | amount |
+            | 5      |
 
     # Background:
     #     Given I have deployed the business network definition ..

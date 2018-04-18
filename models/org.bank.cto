@@ -22,9 +22,7 @@ transaction AccountTransfer {
   o Double amount
 }
 
-event AccountTransferred {
-  --> Account from
-  --> Account to
+event TransferCompleted {
   o Double amount
 }
 
