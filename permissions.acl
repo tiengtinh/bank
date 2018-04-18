@@ -1,6 +1,43 @@
 /**
  * Sample access control list.
  */
+
+rule CustomerCanReadUpdateTheirOwnProfile {
+    description: "customer can only read and update their own profile"
+    participant(p): "org.bank.Customer"
+    operation: READ, UPDATE
+    resource(r): "org.bank.Customer"
+    condition: (r.getIdentifier() === p.getIdentifier())
+    action: ALLOW
+}
+
+rule CustomerCanReadFromOwnAccount {
+    description: "Customers can only read only from their own account"
+    participant(p): "org.bank.Customer"
+    operation: READ
+    resource(r): "org.bank.Account"
+    condition: (r.owner.getIdentifier() === p.getIdentifier())
+    action: ALLOW
+}
+
+rule CustomerCanCreateAccountTransferFromOwnAccount {
+    description: "Customers can only create AccountTransfer transactions from their own account"
+    participant(p): "org.bank.Customer"
+    operation: CREATE
+    resource(r): "org.bank.AccountTransfer"
+    condition: (r.owner.from.getIdentifier() === p.getIdentifier())
+    action: ALLOW
+}
+
+rule CustomerCanReadAccountTransferFromOwnAccount {
+    description: "Customers can read Account transfer transaction from their account"
+    participant(p): "org.bank.Customer"
+    operation: READ
+    resource(r): "org.bank.AccountTransfer"
+    condition: (r.owner.from.getIdentifier() === p.getIdentifier())
+    action: ALLOW
+}
+
 rule EverybodyCanReadEverything {
     description: "Allow all participants read access to all resources"
     participant: "org.bank.SampleParticipant"

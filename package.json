@@ -1,6 +1,6 @@
 {
   "name": "bank",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "The Bank Business Network",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/bank.bna",

@@ -22,6 +22,12 @@ transaction AccountTransfer {
   o Double amount
 }
 
+event AccountTransferred {
+  --> Account from
+  --> Account to
+  o Double amount
+}
+
 participant SampleParticipant identified by participantId {
   o String participantId
   o String firstName
