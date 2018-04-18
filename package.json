@@ -4,9 +4,10 @@
   "description": "The Bank Business Network",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/bank.bna",
-    "pretest": "npm run lint",
+    "pretest:old": "npm run lint",
     "lint": "eslint .",
-    "test": "nyc mocha -t 0 test/*.js && cucumber-js"
+    "test:old": "nyc mocha -t 0 test/*.js && cucumber-js",
+    "test": "cucumber-js --fail-fast"
   },
   "author": "Tinh",
   "email": "tiengtinh@gmail.com",

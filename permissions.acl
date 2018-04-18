@@ -25,7 +25,17 @@ rule CustomerCanCreateAccountTransferFromOwnAccount {
     participant(p): "org.bank.Customer"
     operation: CREATE
     resource(r): "org.bank.AccountTransfer"
-    condition: (r.owner.from.getIdentifier() === p.getIdentifier())
+    condition: (r.from.owner.getIdentifier() === p.getIdentifier())
+    action: ALLOW
+}
+
+rule CustomerCanReadToAccountFromAccountTransfer {
+    description: ""
+    participant(p): "org.bank.Customer"
+    operation: READ, UPDATE
+    resource(r): "org.bank.Account"
+    transaction(tx): "org.bank.AccountTransfer"
+    condition: (tx.from.owner.getIdentifier() === p.getIdentifier())
     action: ALLOW
 }
 
@@ -34,34 +44,34 @@ rule CustomerCanReadAccountTransferFromOwnAccount {
     participant(p): "org.bank.Customer"
     operation: READ
     resource(r): "org.bank.AccountTransfer"
-    condition: (r.owner.from.getIdentifier() === p.getIdentifier())
+    condition: (r.from.owner.getIdentifier() === p.getIdentifier())
     action: ALLOW
 }
 
-rule EverybodyCanReadEverything {
-    description: "Allow all participants read access to all resources"
-    participant: "org.bank.SampleParticipant"
-    operation: READ
-    resource: "org.bank.*"
-    action: ALLOW
-}
+// rule EverybodyCanReadEverything {
+//     description: "Allow all participants read access to all resources"
+//     participant: "org.bank.SampleParticipant"
+//     operation: READ
+//     resource: "org.bank.*"
+//     action: ALLOW
+// }
 
-rule EverybodyCanSubmitTransactions {
-    description: "Allow all participants to submit transactions"
-    participant: "org.bank.SampleParticipant"
-    operation: CREATE
-    resource: "org.bank.SampleTransaction"
-    action: ALLOW
-}
+// rule EverybodyCanSubmitTransactions {
+//     description: "Allow all participants to submit transactions"
+//     participant: "org.bank.SampleParticipant"
+//     operation: CREATE
+//     resource: "org.bank.SampleTransaction"
+//     action: ALLOW
+// }
 
-rule OwnerHasFullAccessToTheirAssets {
-    description: "Allow all participants full access to their assets"
-    participant(p): "org.bank.SampleParticipant"
-    operation: ALL
-    resource(r): "org.bank.SampleAsset"
-    condition: (r.owner.getIdentifier() === p.getIdentifier())
-    action: ALLOW
-}
+// rule OwnerHasFullAccessToTheirAssets {
+//     description: "Allow all participants full access to their assets"
+//     participant(p): "org.bank.SampleParticipant"
+//     operation: ALL
+//     resource(r): "org.bank.SampleAsset"
+//     condition: (r.owner.getIdentifier() === p.getIdentifier())
+//     action: ALLOW
+// }
 
 rule SystemACL {
   description:  "System ACL to permit all access"
