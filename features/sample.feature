@@ -74,6 +74,12 @@ Feature: Sample
             | amount |
             | 5      |
 
+    Scenario: Customer should not be able to create AccountTransfer with negative amount
+        When I use the identity alice1
+        And I submit the following transaction of type org.bank.AccountTransfer
+            | from | to | amount |
+            | 1    | 2  | -5      |
+        Then I should get an error matching /Value is outside lower bound/
     # Background:
     #     Given I have deployed the business network definition ..
     #     And I have added the following participants of type org.bank.SampleParticipant

@@ -19,7 +19,7 @@ asset Account identified by accountId {
 transaction AccountTransfer {
   --> Account from
   --> Account to
-  o Double amount
+  o Double amount range=[0.,]
 }
 
 event TransferCompleted {
